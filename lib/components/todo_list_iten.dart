@@ -1,24 +1,33 @@
+import 'package:app_task_list/models/task.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 //criando um widget personalizado para ser o item da lista de tarefas
 class TodoListIten extends StatelessWidget {
-  const TodoListIten({super.key});
+  const TodoListIten({super.key, required this.task});
+
+  final Task task;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
       child: Container(
-        color: Colors.grey,
-        child: const Padding(
-          padding: EdgeInsets.all(8.0),
+        margin: const EdgeInsets.only(top: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          color: const Color(0xffDCDCDC),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('data'),
+              Text(DateFormat('dd/MM/yyyy - HH:mm:ss').format(task.date)),
               Text(
-                'tarefa 1',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                task.title,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
             ],
           ),
