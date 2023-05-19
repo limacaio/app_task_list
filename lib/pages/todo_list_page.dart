@@ -14,6 +14,12 @@ class _TodoListPageState extends State<TodoListPage> {
   //lista de obj task
   List<Task> tasks = [];
 
+  void onDelete(Task task) {
+    setState(() {
+      tasks.remove(task);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -73,6 +79,7 @@ class _TodoListPageState extends State<TodoListPage> {
                       for (Task task in tasks)
                         TodoListIten(
                           task: task,
+                          onDelete: onDelete,
                         ),
                     ],
                   ),
