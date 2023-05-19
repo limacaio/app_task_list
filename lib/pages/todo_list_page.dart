@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/todo_list_iten.dart';
 
 class TodoListPage extends StatefulWidget {
   const TodoListPage({super.key});
@@ -9,6 +10,7 @@ class TodoListPage extends StatefulWidget {
 
 class _TodoListPageState extends State<TodoListPage> {
   final TextEditingController taskController = TextEditingController();
+  List<String> tasks = [];
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +38,33 @@ class _TodoListPageState extends State<TodoListPage> {
                     ),
                   ),
                   const SizedBox(width: 6),
+                  //botao de adicionar uma nova tarefa
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       padding: const EdgeInsets.all(16),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      //add nova tarefa na lista
+                      String text = taskController.text;
+                      setState(() {
+                        tasks.add(text);
+                        taskController.clear();
+                      });
+                    },
                     child: const Icon(Icons.add),
                   )
                 ],
+              ),
+              //lista de tarefas adicionadas pelo usuario
+              Flexible(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    //adicionadando a lista task dentro da lisView em tela
+                    for (String task in tasks) TodoListIten(),
+                  ],
+                ),
               ),
               Row(
                 children: [
@@ -53,6 +73,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     child: Text("Possui 0 tarefas Pendentes"),
                   ),
                   const SizedBox(width: 6),
+                  //botão para apagar todas a tarefas da lista de uma vez
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
