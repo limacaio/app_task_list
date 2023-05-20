@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-//criando um widget personalizado para ser o item da lista de tarefas
+
 class TodoListIten extends StatelessWidget {
   const TodoListIten({super.key, required this.task, required this.onDelete});
 

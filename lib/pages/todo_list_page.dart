@@ -18,6 +18,8 @@ class _TodoListPageState extends State<TodoListPage> {
     setState(() {
       tasks.remove(task);
     });
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Tarefa ${task.title} foi removida com sucesso")));
   }
 
   @override
