@@ -13,13 +13,32 @@ class _TodoListPageState extends State<TodoListPage> {
   final TextEditingController taskController = TextEditingController();
   //lista de obj task
   List<Task> tasks = [];
+  Task? deletedTask;
+  int? deletedPosition;
 
   void onDelete(Task task) {
+    deletedTask = task;
+    deletedPosition = tasks.indexOf(task);
     setState(() {
       tasks.remove(task);
     });
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Tarefa ${task.title} foi removida com sucesso")));
+
+    //snackbar
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Tarefa ${task.title} foi removida com sucesso"),
+        //desfaendo o delete armazenando a posição e o item da lista
+        action: SnackBarAction(
+            label: 'Desfazer',
+            onPressed: () {
+              setState(() {
+                tasks.insert(deletedPosition!, deletedTask!);
+              });
+            }),
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
   @override
@@ -65,6 +84,8 @@ class _TodoListPageState extends State<TodoListPage> {
                                 Task(title: text, date: DateTime.now());
                             tasks.add(newtask);
                             taskController.clear();
+                            //hide keyboard
+                            FocusScope.of(context).requestFocus(FocusNode());
                           });
                         }
                       },
@@ -102,7 +123,9 @@ class _TodoListPageState extends State<TodoListPage> {
                         backgroundColor: Colors.red,
                         padding: const EdgeInsets.all(16),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        showDeleteDialog();
+                      },
                       child: const Text("Limpar Tarefas"),
                     )
                   ],
@@ -113,5 +136,44 @@ class _TodoListPageState extends State<TodoListPage> {
         ),
       ),
     );
+  }
+
+//funcão para chamar dialog confimar exclusão em serie
+  void showDeleteDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Limpar Tudo"),
+        content: const Text("Confirma limpar todas as tarefas ?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              'Cancelar',
+              style: TextStyle(color: Colors.green),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              deleteAllTasks();
+            },
+            child: const Text(
+              'Limpar',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //funcção para deletar todoas as tarefas
+  void deleteAllTasks() {
+    setState(() {
+      tasks.clear();
+    });
   }
 }
