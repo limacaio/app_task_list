@@ -75,9 +75,11 @@ class _TodoListPageState extends State<TodoListPage> {
                       child: TextField(
                         controller: taskController,
                         decoration: const InputDecoration(
-                          labelText: 'Adicione uma Tarefa',
-                          border: OutlineInputBorder(),
-                        ),
+                            labelText: 'Adicione uma Tarefa',
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green)),
+                            labelStyle: TextStyle(color: Colors.green)),
                       ),
                     ),
                     const SizedBox(width: 6),
@@ -91,7 +93,7 @@ class _TodoListPageState extends State<TodoListPage> {
                         //add nova tarefa na lista
                         String text = taskController.text;
                         //verificação de vazio
-                        if (text.isEmpty) {
+                        if (text != "") {
                           setState(() {
                             Task newtask =
                                 Task(title: text, date: DateTime.now());
