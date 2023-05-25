@@ -1,4 +1,5 @@
 import 'package:app_task_list/models/task.dart';
+import 'package:app_task_list/repositories/task_repository.dart';
 import 'package:flutter/material.dart';
 import '../components/todo_list_iten.dart';
 
@@ -11,10 +12,22 @@ class TodoListPage extends StatefulWidget {
 
 class _TodoListPageState extends State<TodoListPage> {
   final TextEditingController taskController = TextEditingController();
+  final TaskRepository taskRepository = TaskRepository();
   //lista de obj task
   List<Task> tasks = [];
   Task? deletedTask;
   int? deletedPosition;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    taskRepository.getTaskList().then((value) {
+      setState(() {
+        tasks = value;
+      });
+    });
+  }
 
   void onDelete(Task task) {
     deletedTask = task;
@@ -78,12 +91,15 @@ class _TodoListPageState extends State<TodoListPage> {
                         //add nova tarefa na lista
                         String text = taskController.text;
                         //verificação de vazio
-                        if (text != "") {
+                        if (text.isEmpty) {
                           setState(() {
                             Task newtask =
                                 Task(title: text, date: DateTime.now());
+                            //adicionando uma nova tarefa
                             tasks.add(newtask);
                             taskController.clear();
+                            //salvando no dispositovo
+                            taskRepository.saveTaskList(tasks);
                             //hide keyboard
                             FocusScope.of(context).requestFocus(FocusNode());
                           });
